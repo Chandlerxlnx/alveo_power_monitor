@@ -11,7 +11,7 @@ import sys
 if __name__ == '__main__':
 
     if len(sys.argv) != 4:
-        print 'Usage: python file_name(.xls),  gap_time(seconds), points'
+        print 'Usage: python file_name(.xls),  gap_time(seconds), points(int number)'
         exit(1)
 
     file_name = sys.argv[1]
