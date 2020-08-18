@@ -11,12 +11,19 @@ import sys
 if __name__ == '__main__':
 
     if len(sys.argv) != 4:
-        print 'Usage: python file_name(must .csv file),  gap_time(second), points(number)'
+        print 'Usage: python file_name(must .csv suffix),  gap_time(second), points(number)'
         exit(1)
 
     file_name = sys.argv[1]
     gap_time = sys.argv[2]
     points = sys.argv[3]
+
+    # to do check the
+
+    if os.path.splitext(file_name)[-1] != '.csv':
+        print os.path.splitext(file_name)[-1]
+        print "the file name must be csv suffix"
+        exit(1)
 
     # create recoder file
     rec = open(file_name, 'w')
@@ -50,6 +57,7 @@ if __name__ == '__main__':
             rec.write('\t')
             rec.write(str(datetime.datetime.now()))
             rec.write('\n')
+
         except:
             print ('write error')
 
@@ -61,3 +69,4 @@ if __name__ == '__main__':
             rec.close()  # 在内容写完后关闭文件
             print "test finish"
             exit(0)
+
