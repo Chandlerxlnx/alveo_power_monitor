@@ -11,7 +11,7 @@ import sys
 if __name__ == '__main__':
 
     if len(sys.argv) != 4:
-        print 'Usage: python file_name(.xls),  gap_time(seconds), points(int number)'
+        print 'Usage: python file_name(must .csv file),  gap_time(second), points(number)'
         exit(1)
 
     file_name = sys.argv[1]
@@ -21,6 +21,7 @@ if __name__ == '__main__':
     # create recoder file
     rec = open(file_name, 'w')
     rec.write('card0_pwr\t card_pwr\t time\n')
+    # rec.close()  # 在内容写完后关闭文件
 
     # prepare env
     os.system('source /opt/xilinx/xrt/setup.sh')
@@ -29,29 +30,34 @@ if __name__ == '__main__':
 
     while True:
 
-        # get card0 power
-        p0 = subprocess.Popen('xbutil dump -d 0', stdout=subprocess.PIPE, shell=True)
-        output = p0.stdout.read()
-        card0_pwr = json.loads(output)
-        print card0_pwr["board"]["physical"]["power"]
+        try:
+            # get card0 power
+            p0 = subprocess.Popen('xbutil dump -d 0', stdout=subprocess.PIPE, shell=True)
+            output = p0.stdout.read()
+            card0_pwr = json.loads(output)
+            print card0_pwr["board"]["physical"]["power"]
 
-        # get card1 power
-        p1 = subprocess.Popen('xbutil dump -d 1', stdout=subprocess.PIPE, shell=True)
-        output = p1.stdout.read()
-        card1_pwr = json.loads(output)
-        print card1_pwr["board"]["physical"]["power"]
+            # get card1 power
+            p1 = subprocess.Popen('xbutil dump -d 1', stdout=subprocess.PIPE, shell=True)
+            output = p1.stdout.read()
+            card1_pwr = json.loads(output)
+            print card1_pwr["board"]["physical"]["power"]
 
-        rec.write(card0_pwr["board"]["physical"]["power"])
-        rec.write('\t')
-        rec.write(card1_pwr["board"]["physical"]["power"])
-        rec.write('\t')
-        rec.write(str(datetime.datetime.now()))
-        rec.write('\n')
+            # with open(file_name, 'a') as rec:
+            rec.write(card0_pwr["board"]["physical"]["power"])
+            rec.write('\t')
+            rec.write(card1_pwr["board"]["physical"]["power"])
+            rec.write('\t')
+            rec.write(str(datetime.datetime.now()))
+            rec.write('\n')
+        except:
+            print ('write error')
 
         time.sleep(int(gap_time))
 
         # judge return
         number = number + 1
         if number > int(points):
+            rec.close()  # 在内容写完后关闭文件
             print "test finish"
             exit(0)
