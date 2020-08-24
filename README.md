@@ -5,9 +5,9 @@
 ###  2 xilinx_u200_xdma_201830_2 shell 
 ### 3 XRT 2019.1
   
-Userage:
+### Userage:
 #> python pwr.py <file_name(.csv)> <interval (s)> <counter>
-Example:
+### Example:
 #> python pwr.py pwr.csv 15 100
 按照15秒一个点采集100个点 card0 和card1 的瞬时功耗
 
